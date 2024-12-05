@@ -1,0 +1,1 @@
+If you are solving part 1, then change the preprocessor directive of PART2 to false, then recompile. If you are solving the sample input, then you must change the preprocessor directive INPUT_LINES to 6.
