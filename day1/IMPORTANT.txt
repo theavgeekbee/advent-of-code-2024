@@ -1,0 +1,1 @@
+Prepend inputs with the number of lines in the input before everything.
