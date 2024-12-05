@@ -1,5 +1,5 @@
-#define N_ROWS 3 
-#define N_COLS 3
+#define N_ROWS 140 
+#define N_COLS 140
 
 #include <iostream>
 #include <cstdlib>
@@ -45,36 +45,36 @@ int matched(char data[N_ROWS][N_COLS], int x, int y, char c) {
 	return count;
 }
 
-bool check_ms(char data[N_ROWS][N_COLS], int x, int y) {
-	return data[x][y] == 'M' || data[x][y] == 'S';
-}
-bool has_char_surrounding(char data[N_ROWs
-bool is_cross_mas(char data[N_ROWS][N_COLS], int x, int y) {
-	if (x < 1 || x >= N_ROWS - 1 || y < 1 || y > N_COLS - 1)
+bool is_cross_mas(char data[N_ROWS][N_COLS], int x, int y) { 
+	if (x < 1 || x >= N_ROWS - 1 || y < 1 || y >= N_COLS - 1)
 		return 0;
 	if (data[x][y] != 'A')
 		return 0;
 
-	int count = 0;
-	
-	// Bottom left is M
-	if (check_with_bounds(data, x - 1, y - 1, 'M') &&
-			check_with_bounds(data, x + 1, y + 1, 'S'))
-		count++;
-	// Bottom right is M
-	if (check_with_bounds(data, x + 1, y - 1, 'M') &&
-			check_with_bounds(data, x - 1, y + 1, 'S'))
-		count++;
-	// Top left is M
-	if (check_with_bounds(data, x - 1, y + 1, 'M') &&
-			check_with_bounds(data, x + 1, y - 1, 'S'))
-		count++;
-	// Top right is M
-	if (check_with_bounds(data, x + 1, y + 1, 'M') &&
-			check_with_bounds(data, x - 1, y - 1, 'S'))
-		count++;
+	// M on left
+	if (data[x - 1][y - 1] == 'M' && data[x + 1][y - 1] == 'M' &&
+		data[x - 1][y + 1] == 'S' && data[x + 1][y + 1] == 'S')
+		return true;
+	// M on right	
+	if (data[x - 1][y + 1] == 'M' && data[x + 1][y + 1] == 'M' &&
+		data[x - 1][y - 1] == 'S' && data[x + 1][y - 1] == 'S')
+		return true;
+	// M on top
+	if (data[x - 1][y + 1] == 'M' && data[x - 1][y - 1] == 'M' &&
+		data[x + 1][y + 1] == 'S' && data[x + 1][y - 1] == 'S')
+		return true;
+	// M on bottom
+	if (data[x + 1][y + 1] == 'M' && data[x + 1][y - 1] == 'M' &&
+		data[x - 1][y + 1] == 'S' && data[x - 1][y - 1] == 'S')
+		return true;
+	return false;
+}
 
-	return count;
+void print_surroundings(char data[N_ROWS][N_COLS], int x, int y) {
+	std::cout << "found cross at " << x << " " << y << std::endl;
+	std::cout << data[x - 1][y - 1] << " " << data[x - 1][y + 1] << std::endl;
+	std::cout << " " << data[x][y] << " " << std::endl;
+	std::cout << data[x + 1][y - 1] << " " << data[x + 1][y + 1] << std::endl;
 }
 
 int main() {
@@ -87,14 +87,15 @@ int main() {
 			data[i][ii] = line.at(ii);
 		}
 	}
-	std::cout << data[7][2] << std::endl;
 	std::cout << "done parsing input" << std::endl;
 	int count = 0;
 	int part2 = 0;
 	for (int i = 0; i < N_ROWS; i++) {
 		for (int j = 0; j < N_COLS; j++) {
-			count += matched(data, i, j, 'X');
-			part2 += count_cross_mas(data, i, j);
+			if (is_cross_mas(data, i, j)) {
+				part2++;	
+				print_surroundings(data, i, j);
+			}
 		}
 	}
 
